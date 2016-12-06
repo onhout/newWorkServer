@@ -22,16 +22,17 @@ sudo chmod 755 /usr/local/bin/composer
 #fix npm permission
 nodeprefix=`npm config get prefix`
 if [ $nodeprefix = "/usr/local" ]; then
-	sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}
+	sudo chown -R $(whoami) $($nodeprefix)/{lib/node_modules,bin,share}
 elif [ $nodeprefix = "/usr" ]; then
 	mkdir $HOME"/.npm-global"
-	npm config set prefix '~/.npm-global'
+	npm config set prefix $HOME'/.npm-global'
 	export PATH=$HOME/.npm-global/bin:$PATH
 	source ~/.profile
 fi
+
 npm install -g bower
 
-#write hosts, extra stuff is to spawn another process to write
+#write hosts, extra stuff is to spawn another process to able to write
 sudo -- sh -c "echo 192.168.50.233	prop-db-active >> /etc/hosts"
 sudo -- sh -c "echo 192.168.120.253	active-directory >> /etc/hosts"
 
@@ -49,6 +50,7 @@ if version_gt $php56version $phpver; then
      sudo service apache2 restart
 fi
 
+#adding propdev
 echo "ENTER YOUR PROPDEV BRANCH NAME:"
 
 read branchName
@@ -62,3 +64,8 @@ php composer.phar install
 npm install
 cd ..
 sudo chmod 777 -R propdev
+
+echo "***********"
+echo "**RESTART**"
+echo "***PL0X****"
+echo "***********"
