@@ -12,7 +12,7 @@ sudo apt-get -y --force-yes update
 sudo apt-get -y --force-yes upgrade
 
 #installation
-sudo apt-get install -y gawk svn nodejs build-essential
+sudo apt-get install -y gawk subversion nodejs build-essential
 
 #install composer
 sudo curl -sS https://getcomposer.org/installer | php
