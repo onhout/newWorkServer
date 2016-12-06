@@ -32,10 +32,8 @@ fi
 npm install -g bower
 
 #write hosts
-sudo su
-sudo echo "192.168.50.233	prop-db-active" >> /etc/hosts
-sudo echo "192.168.120.253	active-directory" >> /etc/hosts
-exit
+sudo -- sh -c "echo 192.168.50.233	prop-db-active >> /etc/hosts"
+sudo -- sh -c "echo 192.168.120.253	active-directory >> /etc/hosts"
 
 #test php version
 php56version=5.6
