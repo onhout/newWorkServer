@@ -57,7 +57,7 @@ sudo rm -rf /var/www/propdev
 sudo mkdir /var/www/propdev
 sudo chmod 777 -R $_
 cd $_
-sudo svn checkout http://ec2-54-83-225-157.compute-1.amazonaws.com:11411/repos/Branches/gliu/$branchName/ . --username=gliu --password%Password1
+sudo svn checkout http://ec2-54-83-225-157.compute-1.amazonaws.com:11411/repos/Branches/gliu/$branchName/ . --username=gliu --password=%Password1
 php composer.phar install
 npm install
 cd ..
