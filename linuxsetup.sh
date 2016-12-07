@@ -33,9 +33,14 @@ function setup_computer() {
 
 				npm install -g bower gulp-cli
 
-				#write hosts, extra stuff is to spawn another process to able to write
-				sudo -- sh -c "echo 192.168.50.233	prop-db-active >> /etc/hosts"
-				sudo -- sh -c "echo 192.168.120.253	active-directory >> /etc/hosts"
+				# next line inserts prop-db-active in hosts file
+				echo "Modify /ect/hosts..."
+				sudo sed -i '/127.0.0.1 localhost/a \
+				127.0.0.1 prop-db-active' /etc/hosts
+
+				# next line inserts active-directory in hosts file
+				sudo sed -i '/127.0.0.1 localhost/a \
+				192.168.120.253 active-directory' /etc/hosts
 
 				#test php version
 				php56version=5.6
