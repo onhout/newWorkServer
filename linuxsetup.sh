@@ -3,69 +3,138 @@
 #helpers
 function version_gt() { test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1"; }
 
-#add repos
-sudo add-apt-repository -y ppa:ondrej/php
-sudo curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+function setup_computer() {
+					#add repos
+				sudo add-apt-repository -y ppa:ondrej/php
+				sudo curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 
-#update
-sudo apt-get -y --force-yes update
-sudo apt-get -y --force-yes upgrade
+				#update
+				sudo apt-get -y --force-yes update
+				sudo apt-get -y --force-yes upgrade
 
-#installation
-sudo apt-get install -y gawk subversion nodejs build-essential
+				#installation
+				sudo apt-get install -y gawk subversion nodejs build-essential unzip apache2 smarty
 
-#install composer
-sudo curl -sS https://getcomposer.org/installer | php
-sudo mv composer.phar /usr/local/bin/composer
-sudo chmod 755 /usr/local/bin/composer
+				#install composer
+				sudo curl -sS https://getcomposer.org/installer | php
+				sudo mv composer.phar /usr/local/bin/composer
+				sudo chmod 755 /usr/local/bin/composer
 
-#fix npm permission
-nodeprefix=`npm config get prefix`
-if [ $nodeprefix = "/usr/local" ]; then
-	sudo chown -R $(whoami) $($nodeprefix)/{lib/node_modules,bin,share}
-elif [ $nodeprefix = "/usr" ]; then
-	mkdir $HOME"/.npm-global"
-	npm config set prefix $HOME'/.npm-global'
-	export PATH=$HOME/.npm-global/bin:$PATH
-	source ~/.profile
-fi
+				#fix npm permission
+				nodeprefix=`npm config get prefix`
+				if [ $nodeprefix = "/usr/local" ]; then
+					sudo chown -R $(whoami) $($nodeprefix)/{lib/node_modules,bin,share}
+				elif [ $nodeprefix = "/usr" ]; then
+					mkdir $HOME"/.npm-global"
+					npm config set prefix $HOME'/.npm-global'
+					export PATH=$HOME/.npm-global/bin:$PATH
+					source $HOME/.profile
+				fi
 
-npm install -g bower
+				npm install -g bower gulp-cli
 
-#write hosts, extra stuff is to spawn another process to able to write
-sudo -- sh -c "echo 192.168.50.233	prop-db-active >> /etc/hosts"
-sudo -- sh -c "echo 192.168.120.253	active-directory >> /etc/hosts"
+				#write hosts, extra stuff is to spawn another process to able to write
+				sudo -- sh -c "echo 192.168.50.233	prop-db-active >> /etc/hosts"
+				sudo -- sh -c "echo 192.168.120.253	active-directory >> /etc/hosts"
 
-#test php version
-php56version=5.6
-phpver=`php -v |grep -Eow '^PHP [^ ]+' |gawk '{ print $2 }'`
+				#test php version
+				php56version=5.6
+				phpver=`php -v |grep -Eow '^PHP [^ ]+' |gawk '{ print $2 }'`
 
-#install php
-if version_gt $php56version $phpver; then
-     echo "$php56version is greater than installed version! ($phpver)!"
-     echo "installing PHP$php56version..."
-     sudo apt-get install -y php5.6 php5.6-cli php5.6-common php5.6-curl php5.6-dev php5.6-gd php5.6-intl php5.6-json php5.6-ldap php5.6-mbstring php5.6-mcrypt php5.6-memcache php5.6-memcached php5.6-mysql php5.6-pgsql php5.6-readline php5.6-sqlite php5.6-xml php5.6-xsl libzip4 php5.6-zip libapache2-mod-php5
-     sudo a2dismod php5.5
-     sudo a2enmod php5.6
-     sudo service apache2 restart
-fi
+				#install php
+				if version_gt $php56version $phpver; then
+				     echo "$php56version is greater than installed version! ($phpver)!"
+				     echo "installing PHP$php56version..."
+				     sudo apt-get install -y php5.6 php5.6-cli php5.6-common php5.6-curl php5.6-dev php5.6-gd php5.6-intl php5.6-json php5.6-ldap php5.6-mbstring php5.6-mcrypt php5.6-memcache php5.6-memcached php5.6-mysql php5.6-pgsql php5.6-readline php5.6-sqlite php5.6-xml php5.6-xsl libzip4 php5.6-zip libapache2-mod-php5
+				     sudo a2dismod php5.5
+				     sudo a2enmod php5.6
+				     sudo service apache2 restart
+				fi
 
-#adding propdev
-echo "ENTER YOUR PROPDEV BRANCH NAME:"
+				sudo cp ./mypropdev.mkainc.com.conf /etc/apache2/sites-available
+				sudo a2ensite mypropdev.mkainc.com.conf
+				sudo cp ./mypreproduction.mkainc.com.conf /etc/apache2/sites-available
+				sudo a2ensite mypreproduction.mkainc.com.conf
+				sudo cp ./myproplive.mkainc.com.conf /etc/apache2/sites-available
+				sudo a2ensite myproplive.mkainc.com.conf
 
-read branchName
+				cd /var/www/propdev
+				sudo mkdir vendor
+				sudo mkdir mobile/data
+				sudo mkdir mobile/data/mka_alerts
+				sudo mkdir mobile/data/odk_prod
+				sudo php composer.phar self-update
+				sudo php composer.phar install
 
-sudo rm -rf /var/www/propdev
-sudo mkdir /var/www/propdev
-sudo chmod 777 -R $_
-cd $_
-sudo svn checkout http://ec2-54-83-225-157.compute-1.amazonaws.com:11411/repos/Branches/gliu/$branchName/ . --username=gliu --password=%Password1
-php composer.phar install
-npm install
-cd ..
-sudo chmod 777 -R propdev
+				cd /var/www/preproduction
+				sudo mkdir vendor
+				sudo mkdir mobile/data
+				sudo mkdir mobile/data/mka_alerts
+				sudo mkdir mobile/data/odk_prod
+				sudo php composer.phar self-update
+				sudo php composer.phar install
 
-echo "***********"
-echo "**RESTART**"
-echo "***PL0X****"
-echo "***********"
+				cd /var/www/live
+				sudo mkdir vendor
+				sudo mkdir mobile/data
+				sudo mkdir mobile/data/mka_alerts
+				sudo mkdir mobile/data/odk_prod
+				sudo php composer.phar self-update
+				sudo php composer.phar install
+
+				sudo service apache2 restart
+
+				echo "***********"
+				echo "**RESTART**"
+				echo "***PL0X****"
+				echo "***********"
+}
+
+function get_new_branch() {
+					#adding propdev
+				echo "ENTER YOUR PROPDEV BRANCH NAME:"
+
+				read branchName
+
+				sudo rm -rf /var/www/propdev
+				sudo mkdir /var/www/propdev
+				sudo chmod 777 -R $_
+				cd $_
+				sudo svn checkout http://ec2-54-83-225-157.compute-1.amazonaws.com:11411/repos/Branches/gliu/$branchName/ . --username=gliu --password=%Password1
+				php composer.phar install
+				npm install
+				cd ..
+				sudo chmod 777 -R propdev
+}
+
+function merge_preproduction() {
+				cd /var/www/propdev
+				sudo svn update
+				sudo svn merge http://ec2-54-83-225-157.compute-1.amazonaws.com:11411/repos/Branches/prop_preproduction/web/ --username=gliu --password=%Password1 
+				sudo svn commit -m "Merged with preproduction"
+}
+
+
+PS3='Please enter your choice: '
+options=("Set Up Computer" "Checkout Branch" "Merge to Preproduction" "Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "Set Up Computer")
+            setup_computer
+            break
+            ;;
+        "Checkout Branch")
+            get_new_branch
+            break
+            ;;
+        "Merge to Preproduction")
+            merge_preproduction
+            break
+            ;;
+        "Quit")
+            break
+            ;;
+        *) echo invalid option;;
+    esac
+done
