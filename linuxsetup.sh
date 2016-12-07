@@ -131,7 +131,7 @@ do
             break
             ;;
         "Get All Branches")
-            get_new_branches
+            get_all_branches
             break
             ;;
         "Quit")
