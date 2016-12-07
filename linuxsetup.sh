@@ -58,30 +58,6 @@ function setup_computer() {
 				sudo cp ./myproplive.mkainc.com.conf /etc/apache2/sites-available
 				sudo a2ensite myproplive.mkainc.com.conf
 
-				cd /var/www/propdev
-				sudo mkdir vendor
-				sudo mkdir mobile/data
-				sudo mkdir mobile/data/mka_alerts
-				sudo mkdir mobile/data/odk_prod
-				sudo php composer.phar self-update
-				sudo php composer.phar install
-
-				cd /var/www/preproduction
-				sudo mkdir vendor
-				sudo mkdir mobile/data
-				sudo mkdir mobile/data/mka_alerts
-				sudo mkdir mobile/data/odk_prod
-				sudo php composer.phar self-update
-				sudo php composer.phar install
-
-				cd /var/www/live
-				sudo mkdir vendor
-				sudo mkdir mobile/data
-				sudo mkdir mobile/data/mka_alerts
-				sudo mkdir mobile/data/odk_prod
-				sudo php composer.phar self-update
-				sudo php composer.phar install
-
 				sudo service apache2 restart
 
 				echo "***********"
@@ -107,6 +83,28 @@ function get_new_branch() {
 				sudo chmod 777 -R propdev
 }
 
+function get_all_branches() {
+				sudo rm -rf /var/www/preproduction
+				sudo mkdir /var/www/preproduction
+				sudo chmod 777 -R $_
+				cd $_
+				sudo svn checkout http://ec2-54-83-225-157.compute-1.amazonaws.com:11411/repos/Branches/prop_preproduction/web/ . --username=gliu --password=%Password1
+				php composer.phar install
+				npm install
+				cd ..
+				sudo chmod 777 -R propdev
+
+				sudo rm -rf /var/www/live
+				sudo mkdir /var/www/live
+				sudo chmod 777 -R $_
+				cd $_
+				sudo svn checkout http://ec2-54-83-225-157.compute-1.amazonaws.com:11411/repos/prop/web/ . --username=gliu --password=%Password1
+				php composer.phar install
+				npm install
+				cd ..
+				sudo chmod 777 -R propdev
+}
+
 function merge_preproduction() {
 				cd /var/www/propdev
 				sudo svn update
@@ -116,7 +114,7 @@ function merge_preproduction() {
 
 
 PS3='Please enter your choice: '
-options=("Set Up Computer" "Checkout Branch" "Merge to Preproduction" "Quit")
+options=("Set Up Computer" "Checkout Branch" "Merge to Preproduction" "Get All Branches" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -129,6 +127,10 @@ do
             break
             ;;
         "Merge to Preproduction")
+            merge_preproduction
+            break
+            ;;
+        "Get All Branches")
             merge_preproduction
             break
             ;;
