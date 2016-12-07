@@ -131,7 +131,7 @@ do
             break
             ;;
         "Get All Branches")
-            merge_preproduction
+            get_new_branches
             break
             ;;
         "Quit")
