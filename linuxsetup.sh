@@ -13,12 +13,23 @@ function setup_computer() {
 				sudo apt-get -y --force-yes upgrade
 
 				#installation
-				sudo apt-get install -y gawk subversion nodejs build-essential unzip apache2 smarty
+				sudo apt-get install -y gawk subversion nodejs build-essential unzip apache2 smarty checkinstall libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev python-pip
 
 				#install composer
 				sudo curl -sS https://getcomposer.org/installer | php
 				sudo mv composer.phar /usr/local/bin/composer
 				sudo chmod 755 /usr/local/bin/composer
+
+				#install python
+				cd /usr/src
+				sudo wget https://www.python.org/ftp/python/3.5.2/Python-3.5.2.tgz
+				sudo tar xzf Python-3.5.2.tgz
+				cd Python-3.5.2
+				sudo ./configure
+
+				#install django
+				cd $HOME
+				pip3 install virtualenv django
 
 				#fix npm permission
 				nodeprefix=`npm config get prefix`
@@ -33,14 +44,9 @@ function setup_computer() {
 
 				npm install -g bower gulp-cli
 
-				# next line inserts prop-db-active in hosts file
-				echo "Modify /ect/hosts..."
-				sudo sed -i '/127.0.0.1 localhost/a \
-				127.0.0.1 prop-db-active' /etc/hosts
-
-				# next line inserts active-directory in hosts file
-				sudo sed -i '/127.0.0.1 localhost/a \
-				192.168.120.253 active-directory' /etc/hosts
+				#write hosts, extra stuff is to spawn another process to able to write
+				sudo -- sh -c "echo 192.168.50.233	prop-db-active >> /etc/hosts"
+				sudo -- sh -c "echo 192.168.120.253	active-directory >> /etc/hosts"
 
 				#test php version
 				php56version=5.6
