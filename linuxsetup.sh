@@ -26,10 +26,11 @@ function setup_computer() {
 				sudo tar xzf Python-3.5.2.tgz
 				cd Python-3.5.2
 				sudo ./configure
+				sudo make install
 
 				#install django
 				cd $HOME
-				pip3 install virtualenv django
+				pip install virtualenv django
 
 				#fix npm permission
 				nodeprefix=`npm config get prefix`
@@ -62,11 +63,11 @@ function setup_computer() {
 				     sudo service apache2 restart
 				fi
 
-				sudo cp ./mypropdev.mkainc.com.conf /etc/apache2/sites-available
+				sudo cp mypropdev.mkainc.com.conf /etc/apache2/sites-available
 				sudo a2ensite mypropdev.mkainc.com.conf
-				sudo cp ./mypreproduction.mkainc.com.conf /etc/apache2/sites-available
+				sudo cp mypreproduction.mkainc.com.conf /etc/apache2/sites-available
 				sudo a2ensite mypreproduction.mkainc.com.conf
-				sudo cp ./myproplive.mkainc.com.conf /etc/apache2/sites-available
+				sudo cp myproplive.mkainc.com.conf /etc/apache2/sites-available
 				sudo a2ensite myproplive.mkainc.com.conf
 
 				sudo service apache2 restart
