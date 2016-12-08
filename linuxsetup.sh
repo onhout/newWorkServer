@@ -30,7 +30,8 @@ function setup_computer() {
 
 				#install django
 				cd $HOME
-				pip install virtualenv django
+				sudo pip3 install --upgrade pip
+				sudo pip3 install virtualenv django simplejson requests Jinja2
 
 				#fix npm permission
 				nodeprefix=`npm config get prefix`
@@ -43,7 +44,7 @@ function setup_computer() {
 					source $HOME/.profile
 				fi
 
-				npm install -g bower gulp-cli
+				npm install -g bower gulp-cli socket.io request babel
 
 				#write hosts, extra stuff is to spawn another process to able to write
 				sudo -- sh -c "echo 192.168.50.233	prop-db-active >> /etc/hosts"
@@ -77,9 +78,8 @@ function setup_computer() {
 				echo "***PL0X****"
 				echo "***********"
 }
-
+#adding propdev
 function get_new_branch() {
-					#adding propdev
 				echo "ENTER YOUR PROPDEV BRANCH NAME:"
 
 				read branchName
@@ -126,11 +126,11 @@ function merge_preproduction() {
 
 
 PS3='Please enter your choice: '
-options=("Set Up Computer" "Checkout Branch" "Merge to Preproduction" "Get All Branches" "Quit")
+options=("Set Up Server" "Checkout Branch" "Merge to Preproduction" "Get All Branches" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
-        "Set Up Computer")
+        "Set Up Server")
             setup_computer
             break
             ;;
