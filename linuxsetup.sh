@@ -4,7 +4,7 @@
 function version_gt() { test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1"; }
 
 function setup_computer() {
-					#add repos
+				#add repos
 				sudo add-apt-repository -y ppa:ondrej/php
 				sudo curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 
@@ -75,7 +75,7 @@ function setup_computer() {
 
 				echo "***********"
 				echo "**RESTART**"
-				echo "***PL0X****"
+				echo "**COMPUTER*"
 				echo "***********"
 }
 #adding propdev
@@ -120,7 +120,7 @@ function get_all_branches() {
 function merge_preproduction() {
 				cd /var/www/propdev
 				sudo svn update
-				sudo svn merge http://ec2-54-83-225-157.compute-1.amazonaws.com:11411/repos/Branches/prop_preproduction/web/ --username=gliu --password=%Password1 
+				sudo svn merge http://ec2-54-83-225-157.compute-1.amazonaws.com:11411/repos/Branches/prop_preproduction/web/ --username=gliu --password=%Password1 --accept=theirs-full
 				sudo svn commit -m "Merged with preproduction"
 }
 
