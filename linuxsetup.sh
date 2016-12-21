@@ -131,14 +131,12 @@ function merge_preproduction() {
 function setup_new_branch(){
     echo "Enter New Branch Name:"
     read branchName
-    echo "Enter Commit Message:"
-    read commitMessage
-    sudo svn copy http://ec2-54-83-225-157.compute-1.amazonaws.com:11411/repos/Branches/prop_preproduction/web/ --username=gliu --password=%Password1 -m "$commitMessage" http://ec2-54-83-225-157.compute-1.amazonaws.com:11411/repos/Branches/gliu/$branchName
+    sudo svn copy http://ec2-54-83-225-157.compute-1.amazonaws.com:11411/repos/Branches/prop_preproduction/web/ --username=gliu --password=%Password1 -m "Copy from Preproduction" http://ec2-54-83-225-157.compute-1.amazonaws.com:11411/repos/Branches/gliu/$branchName
 }
 
 
 PS3='Please enter your choice: '
-options=("Set Up Server" "Checkout Branch" "Merge to Preproduction" "Get All Branches" "Set Up New Branch" "Quit")
+options=("Set Up Server" "Checkout Branch" "Merge to Preproduction" "Get All Branches" "Copy Working Copy of Preproduction" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -158,7 +156,7 @@ do
             get_all_branches
             break
             ;;
-        "Set Up New Branch")
+        "Copy Working Copy of Preproduction")
             setup_new_branch
             break
             ;;
