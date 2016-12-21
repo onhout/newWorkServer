@@ -93,6 +93,8 @@ function get_new_branch() {
 				npm install
 				cd ..
 				sudo chmod 777 -R propdev
+                                cd propdev
+                                gulp prepForDeployment
 }
 
 function get_all_branches() {
@@ -121,6 +123,7 @@ function merge_preproduction() {
 				cd /var/www/propdev
 				sudo svn update
 				sudo svn merge http://ec2-54-83-225-157.compute-1.amazonaws.com:11411/repos/Branches/prop_preproduction/web/ --username=gliu --password=%Password1 --accept=theirs-full
+                                svn status | grep '?' | sed 's/^.* /svn add /' | bash
 				sudo svn commit -m "Merged with preproduction"
 }
 
