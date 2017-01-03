@@ -31,7 +31,7 @@ function setup_computer() {
 				#install django
 				cd $HOME
 				sudo pip3 install --upgrade pip
-				sudo pip3 install virtualenv django simplejson requests Jinja2
+				sudo pip3 install virtualenv django simplejson requests Jinja2 wagtail
 
 				#fix npm permission
 				nodeprefix=`npm config get prefix`
@@ -93,8 +93,6 @@ function get_new_branch() {
 				npm install
 				cd ..
 				sudo chmod 777 -R propdev
-                                cd propdev
-                                gulp prepForDeployment
 }
 
 function get_all_branches() {
