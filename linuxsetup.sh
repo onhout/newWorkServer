@@ -88,7 +88,7 @@ function get_new_branch() {
 				sudo mkdir /var/www/propdev
 				sudo chmod 777 -R $_
 				cd $_
-				sudo svn checkout http://ec2-54-83-225-157.compute-1.amazonaws.com:11411/repos/Branches/gliu/$branchName/ . --username=gliu --password=%Password1
+				sudo svn checkout http://svn.mkainc.com:11411/repos/Branches/gliu/$branchName/ . --username=gliu --password=%Password1
 				php composer.phar install
 				npm install
 				cd ..
@@ -102,7 +102,7 @@ function get_all_branches() {
 				sudo mkdir /var/www/preproduction
 				sudo chmod 777 -R $_
 				cd $_
-				sudo svn checkout http://ec2-54-83-225-157.compute-1.amazonaws.com:11411/repos/Branches/prop_preproduction/web/ . --username=gliu --password=%Password1
+				sudo svn checkout http://svn.mkainc.com:11411/repos/Branches/prop_preproduction/web/ . --username=gliu --password=%Password1
 				php composer.phar install
 				npm install
 				cd ..
@@ -112,7 +112,7 @@ function get_all_branches() {
 				sudo mkdir /var/www/live
 				sudo chmod 777 -R $_
 				cd $_
-				sudo svn checkout http://ec2-54-83-225-157.compute-1.amazonaws.com:11411/repos/prop/web/ . --username=gliu --password=%Password1
+				sudo svn checkout http://svn.mkainc.com:11411/repos/prop/web/ . --username=gliu --password=%Password1
 				php composer.phar install
 				npm install
 				cd ..
@@ -122,7 +122,7 @@ function get_all_branches() {
 function merge_preproduction() {
 				cd /var/www/propdev
 				sudo svn update
-				sudo svn merge http://ec2-54-83-225-157.compute-1.amazonaws.com:11411/repos/Branches/prop_preproduction/web/ --username=gliu --password=%Password1 --accept=theirs-full
+				sudo svn merge http://svn.mkainc.com:11411/repos/Branches/prop_preproduction/web/ --username=gliu --password=%Password1 --accept=theirs-full
                                 svn status | grep '?' | sed 's/^.* /svn add /' | bash
 				sudo svn commit -m "Merged with preproduction"
 }
@@ -131,7 +131,7 @@ function merge_preproduction() {
 function setup_new_branch(){
     echo "Enter New Branch Name:"
     read branchName
-    sudo svn copy http://ec2-54-83-225-157.compute-1.amazonaws.com:11411/repos/Branches/prop_preproduction/web/ --username=gliu --password=%Password1 -m "Copy from Preproduction" http://ec2-54-83-225-157.compute-1.amazonaws.com:11411/repos/Branches/gliu/$branchName
+    sudo svn copy http://svn.mkainc.com:11411/repos/Branches/prop_preproduction/web/ --username=gliu --password=%Password1 -m "Copy from Preproduction" http://svn.mkainc.com:11411/repos/Branches/gliu/$branchName
 }
 
 
